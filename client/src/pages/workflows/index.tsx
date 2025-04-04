@@ -115,7 +115,7 @@ export default function WorkflowsPage() {
         </Button>
       </div>
 
-      <WorkflowList />
+      <WorkflowList hideActionButton={true} />
     </MainLayout>
   );
 }

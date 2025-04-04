@@ -12,14 +12,14 @@ export default function EmailMarketingPage() {
   const [_, setLocation] = useLocation();
   
   // Fetch email templates
-  const { data: templates = [] } = useQuery({
+  const { data: templates = [] } = useQuery<any[]>({
     queryKey: ['/api/email-templates'],
   });
 
   // Get template categories
   const getCategories = () => {
-    const categories = new Set(templates.map((template: any) => template.category));
-    return Array.from(categories);
+    const categories = new Set(templates.map((template: any) => template.category as string));
+    return Array.from(categories) as string[];
   };
 
   const categories = getCategories();
@@ -119,12 +119,12 @@ export default function EmailMarketingPage() {
         </TabsList>
         
         <TabsContent value="all">
-          <EmailTemplateList />
+          <EmailTemplateList hideActionButton={true} />
         </TabsContent>
         
         {categories.map((category) => (
           <TabsContent key={category} value={category}>
-            <EmailTemplateList category={category} />
+            <EmailTemplateList category={category} hideActionButton={true} />
           </TabsContent>
         ))}
       </Tabs>

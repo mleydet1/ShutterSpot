@@ -23,9 +23,10 @@ import { useToast } from "@/hooks/use-toast";
 
 interface WorkflowListProps {
   limit?: number;
+  hideActionButton?: boolean;
 }
 
-export function WorkflowList({ limit }: WorkflowListProps) {
+export function WorkflowList({ limit, hideActionButton = false }: WorkflowListProps) {
   const [_, setLocation] = useLocation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -34,7 +35,7 @@ export function WorkflowList({ limit }: WorkflowListProps) {
   const { 
     data: workflows = [], 
     isLoading 
-  } = useQuery({
+  } = useQuery<any[]>({
     queryKey: ['/api/workflows'],
   });
 
@@ -172,13 +173,15 @@ export function WorkflowList({ limit }: WorkflowListProps) {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold">Automation Workflows</h2>
-        <Button 
-          onClick={() => setLocation('/workflows/new')}
-          className="flex items-center"
-        >
-          <PlusCircle className="mr-2 h-4 w-4" />
-          New Workflow
-        </Button>
+        {!hideActionButton && (
+          <Button 
+            onClick={() => setLocation('/workflows/new')}
+            className="flex items-center"
+          >
+            <PlusCircle className="mr-2 h-4 w-4" />
+            New Workflow
+          </Button>
+        )}
       </div>
       
       <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">

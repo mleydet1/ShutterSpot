@@ -19,16 +19,17 @@ import type { ColumnDef } from "@tanstack/react-table";
 interface EmailTemplateListProps {
   limit?: number;
   category?: string;
+  hideActionButton?: boolean;
 }
 
-export function EmailTemplateList({ limit, category }: EmailTemplateListProps) {
+export function EmailTemplateList({ limit, category, hideActionButton = false }: EmailTemplateListProps) {
   const [_, setLocation] = useLocation();
   
   // Fetch all email templates or templates for a specific category
   const { 
     data: templates = [], 
     isLoading 
-  } = useQuery({
+  } = useQuery<any[]>({
     queryKey: category ? [`/api/email-templates/category/${category}`] : ['/api/email-templates'],
   });
 
@@ -110,13 +111,15 @@ export function EmailTemplateList({ limit, category }: EmailTemplateListProps) {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold">Email Templates</h2>
-        <Button 
-          onClick={() => setLocation(`/email-marketing/templates/new${category ? `?category=${category}` : ''}`)}
-          className="flex items-center"
-        >
-          <PlusCircle className="mr-2 h-4 w-4" />
-          New Template
-        </Button>
+        {!hideActionButton && (
+          <Button 
+            onClick={() => setLocation(`/email-marketing/templates/new${category ? `?category=${category}` : ''}`)}
+            className="flex items-center"
+          >
+            <PlusCircle className="mr-2 h-4 w-4" />
+            New Template
+          </Button>
+        )}
       </div>
       
       <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
