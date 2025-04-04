@@ -77,23 +77,23 @@ export default function ProposalsPage() {
         </TabsList>
         
         <TabsContent value="all">
-          <ProposalList />
+          <ProposalList hideActionButton={true} />
         </TabsContent>
         
         <TabsContent value="draft">
-          <ProposalList />
+          <ProposalList hideActionButton={true} />
         </TabsContent>
         
         <TabsContent value="sent">
-          <ProposalList />
+          <ProposalList hideActionButton={true} />
         </TabsContent>
         
         <TabsContent value="accepted">
-          <ProposalList />
+          <ProposalList hideActionButton={true} />
         </TabsContent>
         
         <TabsContent value="other">
-          <ProposalList />
+          <ProposalList hideActionButton={true} />
         </TabsContent>
       </Tabs>
     </MainLayout>

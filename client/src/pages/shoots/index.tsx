@@ -44,7 +44,7 @@ export default function ShootsPage() {
       </div>
 
       {viewType === "list" ? (
-        <ShootList />
+        <ShootList hideActionButton={true} />
       ) : (
         <ShootCalendar />
       )}

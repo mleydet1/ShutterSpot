@@ -20,27 +20,28 @@ import type { ColumnDef } from "@tanstack/react-table";
 interface ShootListProps {
   limit?: number;
   clientId?: number;
+  hideActionButton?: boolean;
 }
 
-export function ShootList({ limit, clientId }: ShootListProps) {
+export function ShootList({ limit, clientId, hideActionButton = false }: ShootListProps) {
   const [_, setLocation] = useLocation();
   
   // Fetch all shoots or shoots for a specific client
   const { 
     data: shoots = [], 
     isLoading 
-  } = useQuery({
+  } = useQuery<Shoot[]>({
     queryKey: clientId ? [`/api/clients/${clientId}/shoots`] : ['/api/shoots'],
   });
 
   // Fetch all clients for reference
-  const { data: clients = [] } = useQuery({
+  const { data: clients = [] } = useQuery<Client[]>({
     queryKey: ['/api/clients'],
   });
 
   // Get client name by ID
   const getClientName = (clientId: number) => {
-    const client = clients.find((c: Client) => c.id === clientId);
+    const client = clients.find((c) => c.id === clientId);
     return client ? client.name : `Client #${clientId}`;
   };
 
@@ -161,13 +162,15 @@ export function ShootList({ limit, clientId }: ShootListProps) {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold">Shoots</h2>
-        <Button 
-          onClick={() => setLocation(`/shoots/new${clientId ? `?clientId=${clientId}` : ''}`)}
-          className="flex items-center"
-        >
-          <PlusCircle className="mr-2 h-4 w-4" />
-          New Shoot
-        </Button>
+        {!hideActionButton && (
+          <Button 
+            onClick={() => setLocation(`/shoots/new${clientId ? `?clientId=${clientId}` : ''}`)}
+            className="flex items-center"
+          >
+            <PlusCircle className="mr-2 h-4 w-4" />
+            New Shoot
+          </Button>
+        )}
       </div>
       
       <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">

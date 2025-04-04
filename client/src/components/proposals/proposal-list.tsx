@@ -20,27 +20,28 @@ import type { ColumnDef } from "@tanstack/react-table";
 interface ProposalListProps {
   limit?: number;
   clientId?: number;
+  hideActionButton?: boolean;
 }
 
-export function ProposalList({ limit, clientId }: ProposalListProps) {
+export function ProposalList({ limit, clientId, hideActionButton = false }: ProposalListProps) {
   const [_, setLocation] = useLocation();
   
   // Fetch all proposals or proposals for a specific client
   const { 
     data: proposals = [], 
     isLoading 
-  } = useQuery({
+  } = useQuery<Proposal[]>({
     queryKey: clientId ? [`/api/clients/${clientId}/proposals`] : ['/api/proposals'],
   });
 
   // Fetch all clients for reference
-  const { data: clients = [] } = useQuery({
+  const { data: clients = [] } = useQuery<Client[]>({
     queryKey: ['/api/clients'],
   });
 
   // Get client name by ID
   const getClientName = (clientId: number) => {
-    const client = clients.find((c: Client) => c.id === clientId);
+    const client = clients.find((c) => c.id === clientId);
     return client ? client.name : `Client #${clientId}`;
   };
 
@@ -74,21 +75,25 @@ export function ProposalList({ limit, clientId }: ProposalListProps) {
     {
       accessorKey: "createdAt",
       header: "Created",
-      cell: ({ row }) => formatDate(row.getValue("createdAt")),
+      cell: ({ row }) => {
+        const createdAt = row.getValue("createdAt");
+        return createdAt && typeof createdAt === 'string' ? formatDate(createdAt) : '';
+      },
     },
     {
       accessorKey: "expiryDate",
       header: "Expires",
       cell: ({ row }) => {
         const expiryDate = row.getValue("expiryDate");
-        return expiryDate ? (
-          <div className="flex items-center">
-            <CalendarClock className="mr-2 h-4 w-4 text-gray-400" />
-            {formatDate(expiryDate)}
-          </div>
-        ) : (
-          <span className="text-gray-400">No expiry</span>
-        );
+        if (expiryDate && typeof expiryDate === 'string') {
+          return (
+            <div className="flex items-center">
+              <CalendarClock className="mr-2 h-4 w-4 text-gray-400" />
+              {formatDate(expiryDate)}
+            </div>
+          );
+        }
+        return <span className="text-gray-400">No expiry</span>;
       },
     },
     {
@@ -157,13 +162,15 @@ export function ProposalList({ limit, clientId }: ProposalListProps) {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold">Proposals</h2>
-        <Button 
-          onClick={() => setLocation(`/proposals/new${clientId ? `?clientId=${clientId}` : ''}`)}
-          className="flex items-center"
-        >
-          <PlusCircle className="mr-2 h-4 w-4" />
-          New Proposal
-        </Button>
+        {!hideActionButton && (
+          <Button 
+            onClick={() => setLocation(`/proposals/new${clientId ? `?clientId=${clientId}` : ''}`)}
+            className="flex items-center"
+          >
+            <PlusCircle className="mr-2 h-4 w-4" />
+            New Proposal
+          </Button>
+        )}
       </div>
       
       <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
