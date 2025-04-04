@@ -1,0 +1,80 @@
+I need to develop a frontend application with the following specifications:
+
+Pages Required:
+	1.	Dashboard:
+	•	Overview of upcoming shoots, recent client interactions, and pending tasks. 
+	•	Quick access to key metrics and notifications.
+	2.	Client Management:
+	•	List of clients with search and filter capabilities.
+	•	Detailed client profiles including contact information, communication history, and associated shoots.
+	3.	Shoot Management:
+	•	Calendar view displaying scheduled shoots and availability.
+	•	Detailed pages for each shoot containing date, time, location, client details, and attached files. 
+	4.	Booking Proposals:
+	•	Interface to create and send booking proposals with package details, contracts, and payment options. 
+	•	Tracking status of sent proposals. 
+	5.	Scheduling:
+	•	Interactive scheduler for clients to book sessions based on available time slots. 
+	•	Integration with personal calendar to prevent double bookings. 
+	6.	Invoicing:
+	•	Generation and management of invoices with payment tracking. 
+	•	Support for multiple payment methods and schedules.
+	7.	Galleries:
+	•	Upload and manage client galleries with options for proofing and downloads. 
+	•	Customizable gallery layouts to showcase photographs. 
+	8.	Email Marketing:
+	•	Creation and management of email campaigns targeting clients.
+	•	Template library for common communications. 
+	9.	Automation:
+	•	Workflow automation for tasks like sending reminders, follow-ups, and thank-you notes. 
+	•	Customizable triggers based on client actions or shoot dates. 
+	10.	Reports & Analytics:
+	•	Visual reports on sales, booking trends, and client engagement.
+	•	Tools to analyze business performance and identify growth opportunities.
+
+User Roles and Permissions:
+	•	Administrator:
+	•	Full access to all features and settings.
+	•	Manage user accounts and permissions.
+	•	Photographer:
+	•	Access to assigned shoots, client information, and galleries. 
+	•	Ability to create and send booking proposals and invoices. 
+	•	Assistant:
+	•	View access to shoot schedules and client details.
+	•	Limited editing rights as assigned by the Administrator.
+	•	Client:
+	•	Access to their personal portal to view proposals, sign contracts, make payments, and view galleries. 
+
+Shared Components:
+	•	Navigation System:
+	•	Sidebar navigation providing access to main sections like Dashboard, Clients, Shoots, Galleries, and Reports.
+	•	Header/Top Bar:
+	•	Displays user profile with quick settings access.
+	•	Notifications center for recent activities and alerts.
+	•	Global search functionality.
+	•	Breadcrumbs:
+	•	Present on all pages except the Dashboard to indicate the current page’s hierarchy and allow easy navigation back to parent sections.
+
+Modals/Popups:
+	•	Booking Proposal Creation:
+	•	Step-by-step modal to create and customize booking proposals.
+	•	Invoice Generation:
+	•	Popup form to input invoice details and preview before sending.
+	•	Gallery Upload:
+	•	Modal for uploading and organizing photos within a gallery. 
+	•	Automation Setup:
+	•	Interface to define triggers and actions for automated workflows. 
+
+Technical Requirements:
+	•	Use Tailwind CSS for styling to ensure a modern and responsive design.
+	•	Focus on component reusability to maintain consistency and ease of maintenance.
+	•	Implement URL-based routing for all pages using a library like React Router.
+	•	Create custom hooks and services for API data handling to manage state and side effects efficiently.
+	•	Develop a mock API store with realistic data structures, including unique IDs, to facilitate testing and development.
+	•	Ensure the application is fully functional end-to-end, providing a seamless user experience.
+
+Additional Considerations:
+	•	Implement responsive design principles to ensure usability across various devices.
+	•	Incorporate accessibility best practices to make the application usable for all users.
+	•	Provide comprehensive error handling and user feedback mechanisms.
+	•	Include localization support to cater to a diverse user base.
