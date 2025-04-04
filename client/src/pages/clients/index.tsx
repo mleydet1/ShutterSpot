@@ -17,6 +17,8 @@ import { formatDate } from "@/lib/utils";
 import { Client } from "@/types";
 import { ClientCreateModal } from "@/components/clients/client-create-modal";
 import { ShootCreateModal } from "@/components/shoots/shoot-create-modal";
+import { ProposalCreateModal } from "@/components/proposals/proposal-create-modal";
+import { InvoiceCreateModal } from "@/components/invoices/invoice-create-modal";
 
 import type { ColumnDef } from "@tanstack/react-table";
 
@@ -24,6 +26,8 @@ export default function ClientsPage() {
   const [_, setLocation] = useLocation();
   const [isCreateClientModalOpen, setIsCreateClientModalOpen] = useState(false);
   const [isCreateShootModalOpen, setIsCreateShootModalOpen] = useState(false);
+  const [isCreateProposalModalOpen, setIsCreateProposalModalOpen] = useState(false);
+  const [isCreateInvoiceModalOpen, setIsCreateInvoiceModalOpen] = useState(false);
   const [selectedClientId, setSelectedClientId] = useState<number | null>(null);
   
   // Fetch clients
@@ -111,9 +115,20 @@ export default function ClientsPage() {
                 Book a shoot
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => setLocation(`/proposals/new?clientId=${client.id}`)}
+                onClick={() => {
+                  setSelectedClientId(client.id);
+                  setIsCreateProposalModalOpen(true);
+                }}
               >
                 Create proposal
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  setSelectedClientId(client.id);
+                  setIsCreateInvoiceModalOpen(true);
+                }}
+              >
+                Create invoice
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
@@ -160,6 +175,24 @@ export default function ClientsPage() {
         isOpen={isCreateShootModalOpen} 
         onClose={() => {
           setIsCreateShootModalOpen(false);
+          setSelectedClientId(null);
+        }}
+        clientId={selectedClientId || undefined}
+      />
+
+      <ProposalCreateModal
+        isOpen={isCreateProposalModalOpen}
+        onClose={() => {
+          setIsCreateProposalModalOpen(false);
+          setSelectedClientId(null);
+        }}
+        clientId={selectedClientId || undefined}
+      />
+
+      <InvoiceCreateModal
+        isOpen={isCreateInvoiceModalOpen}
+        onClose={() => {
+          setIsCreateInvoiceModalOpen(false);
           setSelectedClientId(null);
         }}
         clientId={selectedClientId || undefined}

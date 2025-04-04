@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation } from "wouter";
 import { MainLayout } from "@/layouts/main-layout";
 import { ProposalList } from "@/components/proposals/proposal-list";
@@ -6,9 +6,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { ProposalCreateModal } from "@/components/proposals/proposal-create-modal";
 
 export default function ProposalsPage() {
   const [_, setLocation] = useLocation();
+  const [isCreateProposalModalOpen, setIsCreateProposalModalOpen] = useState(false);
   
   // Fetch all proposals
   const { data: proposals = [] } = useQuery<any[]>({
@@ -34,7 +36,7 @@ export default function ProposalsPage() {
     >
       <div className="mb-6 flex justify-end">
         <Button
-          onClick={() => setLocation("/proposals/new")}
+          onClick={() => setIsCreateProposalModalOpen(true)}
           className="flex items-center gap-2"
         >
           <PlusCircle className="h-4 w-4" />
@@ -96,6 +98,12 @@ export default function ProposalsPage() {
           <ProposalList hideActionButton={true} />
         </TabsContent>
       </Tabs>
+
+      {/* Modal */}
+      <ProposalCreateModal
+        isOpen={isCreateProposalModalOpen}
+        onClose={() => setIsCreateProposalModalOpen(false)}
+      />
     </MainLayout>
   );
 }
