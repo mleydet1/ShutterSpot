@@ -129,6 +129,13 @@ export function Sidebar({ open, onClose }: SidebarProps) {
             <ChartBarStacked className="mr-3 h-5 w-5" />
             <span>Reports & Analytics</span>
           </SidebarItem>
+          <SidebarItem
+            href="/calendar/settings"
+            active={location.startsWith("/calendar")}
+          >
+            <Calendar className="mr-3 h-5 w-5" />
+            <span>Calendar Integration</span>
+          </SidebarItem>
         </SidebarSection>
       </SidebarContent>
 

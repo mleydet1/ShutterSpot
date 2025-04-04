@@ -1,4 +1,4 @@
-import type { Express, Request, Response } from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { z } from "zod";
@@ -13,6 +13,14 @@ import {
   insertTaskSchema,
   insertActivitySchema
 } from "@shared/schema";
+import { 
+  getGoogleAuthUrl, 
+  handleGoogleAuthCallback, 
+  addShootToGoogleCalendar,
+  generateICalForShoot,
+  generateICalForAllShoots,
+  downloadICalFile
+} from "./services/calendar";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // User routes
@@ -234,6 +242,120 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/metrics', async (req: Request, res: Response) => {
     const metrics = await storage.getBusinessMetrics();
     res.json(metrics);
+  });
+  
+  // Calendar Integration Routes
+  
+  // Google Calendar Auth URL
+  app.get('/api/calendar/google/auth', async (req: Request, res: Response) => {
+    try {
+      const authUrl = getGoogleAuthUrl();
+      res.json({ authUrl });
+    } catch (error) {
+      console.error('Error generating Google Calendar auth URL:', error);
+      res.status(500).json({ message: 'Failed to generate authorization URL' });
+    }
+  });
+  
+  // Google Calendar OAuth Callback
+  app.get('/api/calendar/google/callback', async (req: Request, res: Response) => {
+    const { code } = req.query;
+    
+    if (!code || typeof code !== 'string') {
+      return res.status(400).json({ message: 'Authorization code is required' });
+    }
+    
+    try {
+      const tokens = await handleGoogleAuthCallback(code);
+      
+      // In a real application, you would store these tokens in your database
+      // associated with the current user
+      
+      res.json({ 
+        message: 'Google Calendar successfully connected',
+        accessToken: tokens.access_token 
+      });
+    } catch (error) {
+      console.error('Error handling Google Calendar callback:', error);
+      res.status(500).json({ message: 'Failed to connect to Google Calendar' });
+    }
+  });
+  
+  // Add a shoot to Google Calendar
+  app.post('/api/calendar/google/shoots/:id', async (req: Request, res: Response) => {
+    const shootId = parseInt(req.params.id);
+    const { accessToken } = req.body;
+    
+    if (!accessToken) {
+      return res.status(400).json({ message: 'Access token is required' });
+    }
+    
+    try {
+      const shoot = await storage.getShoot(shootId);
+      
+      if (!shoot) {
+        return res.status(404).json({ message: 'Shoot not found' });
+      }
+      
+      const eventId = await addShootToGoogleCalendar(shoot, accessToken);
+      
+      res.json({ 
+        message: 'Shoot added to Google Calendar',
+        eventId 
+      });
+    } catch (error) {
+      console.error('Error adding shoot to Google Calendar:', error);
+      res.status(500).json({ message: 'Failed to add shoot to Google Calendar' });
+    }
+  });
+  
+  // Download iCal for a single shoot
+  app.get('/api/calendar/ical/shoots/:id', async (req: Request, res: Response) => {
+    const shootId = parseInt(req.params.id);
+    
+    try {
+      const shoot = await storage.getShoot(shootId);
+      
+      if (!shoot) {
+        return res.status(404).json({ message: 'Shoot not found' });
+      }
+      
+      const icalData = generateICalForShoot(shoot);
+      const clientName = shoot.clientName || 'client';
+      const sanitizedTitle = (shoot.title || 'shoot').replace(/[^a-zA-Z0-9]/g, '_');
+      
+      downloadICalFile(req, res, icalData, `${sanitizedTitle}_${clientName}.ics`);
+    } catch (error) {
+      console.error('Error generating iCal for shoot:', error);
+      res.status(500).json({ message: 'Failed to generate iCal file' });
+    }
+  });
+  
+  // Download iCal for all shoots
+  app.get('/api/calendar/ical/shoots', async (req: Request, res: Response) => {
+    try {
+      const shoots = await storage.getShoots();
+      const icalData = generateICalForAllShoots(shoots);
+      
+      downloadICalFile(req, res, icalData, 'all_shoots.ics');
+    } catch (error) {
+      console.error('Error generating iCal for all shoots:', error);
+      res.status(500).json({ message: 'Failed to generate iCal file' });
+    }
+  });
+  
+  // Download iCal for upcoming shoots
+  app.get('/api/calendar/ical/shoots/upcoming', async (req: Request, res: Response) => {
+    try {
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
+      const shoots = await storage.getUpcomingShoots(limit);
+      const icalData = generateICalForAllShoots(shoots);
+      
+      downloadICalFile(req, res, icalData, 'upcoming_shoots.ics');
+    } catch (error) {
+      console.error('Error generating iCal for upcoming shoots:', error);
+      res.status(500).json({ message: 'Failed to generate iCal file' });
+    }
   });
   
   // Create HTTP server

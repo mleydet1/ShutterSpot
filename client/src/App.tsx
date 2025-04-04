@@ -15,6 +15,8 @@ import GalleriesPage from "@/pages/galleries/index";
 import EmailMarketingPage from "@/pages/email-marketing/index";
 import WorkflowsPage from "@/pages/workflows/index";
 import ReportsPage from "@/pages/reports/index";
+import CalendarSettingsPage from "@/pages/calendar/settings";
+import GoogleCalendarCallback from "@/pages/calendar/google-callback";
 
 function Router() {
   return (
@@ -31,6 +33,8 @@ function Router() {
       <Route path="/email-marketing" component={EmailMarketingPage} />
       <Route path="/workflows" component={WorkflowsPage} />
       <Route path="/reports" component={ReportsPage} />
+      <Route path="/calendar/settings" component={CalendarSettingsPage} />
+      <Route path="/calendar/google/callback" component={GoogleCalendarCallback} />
       <Route component={NotFound} />
     </Switch>
   );
