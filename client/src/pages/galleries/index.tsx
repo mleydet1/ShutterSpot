@@ -11,7 +11,7 @@ export default function GalleriesPage() {
   const [_, setLocation] = useLocation();
   
   // Fetch all galleries
-  const { data: galleries = [] } = useQuery({
+  const { data: galleries = [] } = useQuery<any[]>({
     queryKey: ['/api/galleries'],
   });
 
@@ -70,19 +70,19 @@ export default function GalleriesPage() {
         </TabsList>
         
         <TabsContent value="all">
-          <GalleryList />
+          <GalleryList hideActionButton={true} />
         </TabsContent>
         
         <TabsContent value="draft">
-          <GalleryList />
+          <GalleryList hideActionButton={true} />
         </TabsContent>
         
         <TabsContent value="active">
-          <GalleryList />
+          <GalleryList hideActionButton={true} />
         </TabsContent>
         
         <TabsContent value="archived">
-          <GalleryList />
+          <GalleryList hideActionButton={true} />
         </TabsContent>
       </Tabs>
     </MainLayout>

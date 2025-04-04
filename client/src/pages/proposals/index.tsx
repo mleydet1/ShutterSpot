@@ -11,7 +11,7 @@ export default function ProposalsPage() {
   const [_, setLocation] = useLocation();
   
   // Fetch all proposals
-  const { data: proposals = [] } = useQuery({
+  const { data: proposals = [] } = useQuery<any[]>({
     queryKey: ['/api/proposals'],
   });
 

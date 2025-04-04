@@ -13,7 +13,7 @@ export default function InvoicesPage() {
   const [_, setLocation] = useLocation();
   
   // Fetch all invoices
-  const { data: invoices = [] } = useQuery({
+  const { data: invoices = [] } = useQuery<any[]>({
     queryKey: ['/api/invoices'],
   });
 
@@ -120,23 +120,23 @@ export default function InvoicesPage() {
         </TabsList>
         
         <TabsContent value="all">
-          <InvoiceList />
+          <InvoiceList hideActionButton={true} />
         </TabsContent>
         
         <TabsContent value="draft">
-          <InvoiceList />
+          <InvoiceList hideActionButton={true} />
         </TabsContent>
         
         <TabsContent value="pending">
-          <InvoiceList />
+          <InvoiceList hideActionButton={true} />
         </TabsContent>
         
         <TabsContent value="paid">
-          <InvoiceList />
+          <InvoiceList hideActionButton={true} />
         </TabsContent>
         
         <TabsContent value="overdue">
-          <InvoiceList />
+          <InvoiceList hideActionButton={true} />
         </TabsContent>
       </Tabs>
     </MainLayout>

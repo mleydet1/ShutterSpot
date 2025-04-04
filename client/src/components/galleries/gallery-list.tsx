@@ -20,27 +20,28 @@ import type { ColumnDef } from "@tanstack/react-table";
 interface GalleryListProps {
   limit?: number;
   clientId?: number;
+  hideActionButton?: boolean;
 }
 
-export function GalleryList({ limit, clientId }: GalleryListProps) {
+export function GalleryList({ limit, clientId, hideActionButton = false }: GalleryListProps) {
   const [_, setLocation] = useLocation();
   
   // Fetch all galleries or galleries for a specific client
   const { 
     data: galleries = [], 
     isLoading 
-  } = useQuery({
+  } = useQuery<any[]>({
     queryKey: clientId ? [`/api/clients/${clientId}/galleries`] : ['/api/galleries'],
   });
 
   // Fetch all clients for reference
-  const { data: clients = [] } = useQuery({
+  const { data: clients = [] } = useQuery<any[]>({
     queryKey: ['/api/clients'],
   });
 
   // Get client name by ID
   const getClientName = (clientId: number) => {
-    const client = clients.find((c: Client) => c.id === clientId);
+    const client = clients.find((c: any) => c.id === clientId);
     return client ? client.name : `Client #${clientId}`;
   };
 
@@ -50,7 +51,7 @@ export function GalleryList({ limit, clientId }: GalleryListProps) {
   };
 
   // Limit the number of galleries if specified
-  const displayedGalleries = limit ? galleries.slice(0, limit) : galleries;
+  const displayedGalleries = limit ? (galleries as any[]).slice(0, limit) : galleries;
 
   const columns: ColumnDef<Gallery>[] = [
     {
@@ -167,13 +168,15 @@ export function GalleryList({ limit, clientId }: GalleryListProps) {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold">Galleries</h2>
-        <Button 
-          onClick={() => setLocation(`/galleries/new${clientId ? `?clientId=${clientId}` : ''}`)}
-          className="flex items-center"
-        >
-          <PlusCircle className="mr-2 h-4 w-4" />
-          New Gallery
-        </Button>
+        {!hideActionButton && (
+          <Button 
+            onClick={() => setLocation(`/galleries/new${clientId ? `?clientId=${clientId}` : ''}`)}
+            className="flex items-center"
+          >
+            <PlusCircle className="mr-2 h-4 w-4" />
+            New Gallery
+          </Button>
+        )}
       </div>
       
       <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
