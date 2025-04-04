@@ -15,11 +15,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { formatDate } from "@/lib/utils";
 import { Client } from "@/types";
+import { ClientCreateModal } from "@/components/clients/client-create-modal";
+import { ShootCreateModal } from "@/components/shoots/shoot-create-modal";
 
 import type { ColumnDef } from "@tanstack/react-table";
 
 export default function ClientsPage() {
   const [_, setLocation] = useLocation();
+  const [isCreateClientModalOpen, setIsCreateClientModalOpen] = useState(false);
+  const [isCreateShootModalOpen, setIsCreateShootModalOpen] = useState(false);
+  const [selectedClientId, setSelectedClientId] = useState<number | null>(null);
   
   // Fetch clients
   const { 
@@ -98,7 +103,10 @@ export default function ClientsPage() {
                 View details
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => setLocation(`/shoots/new?clientId=${client.id}`)}
+                onClick={() => {
+                  setSelectedClientId(client.id);
+                  setIsCreateShootModalOpen(true);
+                }}
               >
                 Book a shoot
               </DropdownMenuItem>
@@ -125,7 +133,7 @@ export default function ClientsPage() {
       <div className="mb-6 flex justify-between items-center">
         <div></div>
         <Button 
-          onClick={() => setLocation("/clients/new")}
+          onClick={() => setIsCreateClientModalOpen(true)}
           className="flex items-center"
         >
           <PlusCircle className="mr-2 h-4 w-4" />
@@ -141,6 +149,21 @@ export default function ClientsPage() {
           searchPlaceholder="Search clients..."
         />
       </div>
+    
+      {/* Modals */}
+      <ClientCreateModal 
+        isOpen={isCreateClientModalOpen} 
+        onClose={() => setIsCreateClientModalOpen(false)} 
+      />
+      
+      <ShootCreateModal 
+        isOpen={isCreateShootModalOpen} 
+        onClose={() => {
+          setIsCreateShootModalOpen(false);
+          setSelectedClientId(null);
+        }}
+        clientId={selectedClientId || undefined}
+      />
     </MainLayout>
   );
 }
