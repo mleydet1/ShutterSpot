@@ -93,7 +93,7 @@ export function useCalendar() {
       // Create a link and trigger download
       const link = document.createElement('a');
       link.href = url;
-      link.download = `pixelpro-shoots-${type}.ics`;
+      link.download = `shutterspot-shoots-${type}.ics`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

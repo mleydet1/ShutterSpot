@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { PlusCircle, Calendar, FileText, Upload } from "lucide-react";
 import { useLocation } from "wouter";
+import { ClientCreateModal } from "@/components/clients/client-create-modal";
+import { ShootCreateModal } from "@/components/shoots/shoot-create-modal";
+import { ProposalCreateModal } from "@/components/proposals/proposal-create-modal";
+import { GalleryCreateModal } from "@/components/galleries/gallery-create-modal";
 
 export function QuickActions() {
   const [_, setLocation] = useLocation();
+  
+  // State for controlling modal visibility
+  const [isClientModalOpen, setIsClientModalOpen] = useState(false);
+  const [isShootModalOpen, setIsShootModalOpen] = useState(false);
+  const [isProposalModalOpen, setIsProposalModalOpen] = useState(false);
+  const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
 
   const actions = [
     {
@@ -12,7 +22,7 @@ export function QuickActions() {
       icon: <PlusCircle className="h-5 w-5" />,
       bgColor: "bg-primary-100",
       textColor: "text-primary-700",
-      onClick: () => setLocation("/clients/new")
+      onClick: () => setIsClientModalOpen(true)
     },
     {
       id: 2,
@@ -20,7 +30,7 @@ export function QuickActions() {
       icon: <Calendar className="h-5 w-5" />,
       bgColor: "bg-blue-100",
       textColor: "text-blue-700",
-      onClick: () => setLocation("/shoots/new")
+      onClick: () => setIsShootModalOpen(true)
     },
     {
       id: 3,
@@ -28,7 +38,7 @@ export function QuickActions() {
       icon: <FileText className="h-5 w-5" />,
       bgColor: "bg-amber-100",
       textColor: "text-amber-700",
-      onClick: () => setLocation("/proposals/new")
+      onClick: () => setIsProposalModalOpen(true)
     },
     {
       id: 4,
@@ -36,7 +46,7 @@ export function QuickActions() {
       icon: <Upload className="h-5 w-5" />,
       bgColor: "bg-green-100",
       textColor: "text-green-700",
-      onClick: () => setLocation("/galleries/new")
+      onClick: () => setIsGalleryModalOpen(true)
     }
   ];
 
@@ -59,6 +69,30 @@ export function QuickActions() {
           </button>
         ))}
       </div>
+
+      {/* Client Create Modal */}
+      <ClientCreateModal 
+        isOpen={isClientModalOpen} 
+        onClose={() => setIsClientModalOpen(false)} 
+      />
+
+      {/* Shoot Create Modal */}
+      <ShootCreateModal 
+        isOpen={isShootModalOpen} 
+        onClose={() => setIsShootModalOpen(false)} 
+      />
+
+      {/* Proposal Create Modal */}
+      <ProposalCreateModal 
+        isOpen={isProposalModalOpen} 
+        onClose={() => setIsProposalModalOpen(false)} 
+      />
+
+      {/* Gallery Create Modal */}
+      <GalleryCreateModal 
+        isOpen={isGalleryModalOpen} 
+        onClose={() => setIsGalleryModalOpen(false)} 
+      />
     </div>
   );
 }

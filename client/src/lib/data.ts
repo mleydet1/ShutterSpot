@@ -5,7 +5,7 @@ export const currentUser: User = {
   id: 1,
   username: "admin",
   fullName: "Jane Doe",
-  email: "admin@pixelpro.com",
+  email: "admin@shutterspot.com",
   role: "administrator",
   initials: "JD"
 };

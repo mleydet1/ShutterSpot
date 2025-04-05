@@ -148,7 +148,7 @@ export class MemStorage implements IStorage {
       username: "admin",
       password: "password",
       fullName: "Jane Doe",
-      email: "admin@pixelpro.com",
+      email: "admin@shutterspot.com",
       role: "administrator",
       initials: "JD"
     });

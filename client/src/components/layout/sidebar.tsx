@@ -29,7 +29,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
           <span className="flex items-center justify-center w-8 h-8 rounded-md bg-primary-700 text-white">
             <Camera className="h-5 w-5" />
           </span>
-          <h1 className="text-lg font-semibold text-gray-900">PixelPro</h1>
+          <h1 className="text-lg font-semibold text-gray-900">ShutterSpot</h1>
         </div>
         <Button
           variant="ghost"

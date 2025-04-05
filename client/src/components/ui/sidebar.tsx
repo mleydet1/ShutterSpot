@@ -13,7 +13,7 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
       <>
         <div
           className={cn(
-            "fixed inset-y-0 z-50 flex flex-col w-64 bg-sidebar border-r border-sidebar-border transition-transform duration-200 ease-in-out transform lg:static lg:w-64 lg:translate-x-0",
+            "fixed inset-y-0 z-50 flex flex-col w-64 bg-white border-r border-sidebar-border transition-transform duration-200 ease-in-out transform lg:static lg:w-64 lg:translate-x-0",
             open ? "translate-x-0" : "-translate-x-full",
             className
           )}
